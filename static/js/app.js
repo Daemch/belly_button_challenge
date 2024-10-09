@@ -40,19 +40,50 @@ function buildCharts(sample) {
   let sample_values = result.sample_values;
 
     // Build a Bubble Chart
-  
+  let bubchartLayout = {
+    title: "Bacteria Cultures Per Sample",
+    margin: { t: 0 },
+    hovermode: "closest",
+    xaxis: { title: "OTU ID" },
+    margin: { t: 30}
+  };
+  let bubchartData = [
+    {
+      x: otu_ids,
+      y: sample_values,
+      text: otu_labels,
+      mode: "markers",
+      marker: {
+          size: sample_values,
+          color: otu_ids,
+          colorscale: "Earth"
+        }
+      }
+    ];
 
     // Render the Bubble Chart
-
+  Plotly.newPlot("bubble", bubchartData, bubchartLayout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
+  let yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
 
-
-    // Build a Bar Chart
-    // Don't forget to slice and reverse the input data appropriately
-
+    // Build a Bar Chart. Don't forget to slice and reverse the input data appropriately
+  let barData = [
+    {
+      y: yticks,
+      x: sample_values.slice(0, 10).reverse(),
+      text: otu_labels.slice(0, 10).reverse(),
+      type: "bar",
+      orientation: "h",
+    }
+  ];
+  let barLayout = {
+    title: "Top 10 Bacteria Cultures Found",
+    margin: { t: 30, l: 150 }
+  };
 
     // Render the Bar Chart
+    Plotly.newPlot("bar", barchartData, barchartLayout);
 
   });
 }
